@@ -40,6 +40,10 @@ function splitList(value: string): string[] {
 		.filter((v) => v.length > 0);
 }
 
+function isMissingCredentialError(error: unknown): boolean {
+	return /does not have any credentials set/i.test((error as Error)?.message ?? '');
+}
+
 export class Publora implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Publora',
@@ -80,7 +84,14 @@ export class Publora implements INodeType {
 	methods = {
 		loadOptions: {
 			async getAccounts(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const response = await publoraApiRequest.call(this, 'GET', '/platform-connections');
+				let response: IDataObject;
+				try {
+					response = await publoraApiRequest.call(this, 'GET', '/platform-connections');
+				} catch (error) {
+					// n8n can ask for the list just before it attaches the credential to a new node.
+					if (isMissingCredentialError(error)) return [];
+					throw new NodeApiError(this.getNode(), error as JsonObject);
+				}
 				const connections = (response.connections as IDataObject[] | undefined) ?? [];
 				return connections
 					.filter((c) => platformOf(c.platformId as string) !== 'pinterest')
@@ -316,7 +327,7 @@ export class Publora implements INodeType {
 								);
 								const group = (updated.postGroup as IDataObject | undefined) ?? {};
 								result = {
-									status: group.status ?? 'scheduled',
+									status: publishMode === 'now' ? 'publishing' : (group.status ?? 'scheduled'),
 									scheduledTime: updated.scheduledTime ?? scheduledTime,
 								};
 							}
@@ -368,7 +379,12 @@ export class Publora implements INodeType {
 						);
 						output = {
 							postGroupId: created.postGroupId,
-							status: publishMode === 'draft' ? 'draft' : 'scheduled',
+							status:
+								publishMode === 'draft'
+									? 'draft'
+									: publishMode === 'now'
+										? 'publishing'
+										: 'scheduled',
 							scheduledTime: created.scheduledTime ?? null,
 							...(created.warnings ? { warnings: created.warnings } : {}),
 							...(created.media ? { media: created.media } : {}),
@@ -459,7 +475,7 @@ export class Publora implements INodeType {
 					const group = (updated.postGroup as IDataObject | undefined) ?? {};
 					output = {
 						postGroupId,
-						status: group.status,
+						status: fields.publishNow === true ? 'publishing' : group.status,
 						scheduledTime: updated.scheduledTime ?? null,
 						text: group.content,
 						accounts: group.platforms,

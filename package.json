@@ -1,6 +1,6 @@
 {
 	"name": "@publora/n8n-nodes-publora",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Official Publora node for n8n: publish and schedule posts on LinkedIn, X, Instagram, Threads, TikTok, YouTube, Facebook, Bluesky, Mastodon and Telegram, and trigger workflows on post events.",
 	"license": "MIT",
 	"homepage": "https://github.com/publora/n8n-nodes-publora#readme",

@@ -50,6 +50,11 @@ You need a Publora account and an API key. A free plan is available.
 
 If the key is wrong or has been revoked, the credential test reports `Unauthorized`.
 
+## Troubleshooting
+
+- **The account list is empty on a new node.** n8n can request the list just before it attaches the credential. Close the node and open it again.
+- **An AI Agent ignores what the Publora tool returned.** In n8n 2.43.8 and 2.45.7, AI Agent 3.1 received an empty result from every tool we tried, including the built-in Calculator. The Publora tool itself returned the data, and AI Agent 2.2 worked with the same tool.
+
 ## Compatibility
 
 Tested with n8n 2.43.8.
@@ -80,6 +85,10 @@ Tested with n8n 2.43.8.
 - [Support](mailto:support@publora.com)
 
 ## Version history
+
+### 0.1.1
+
+Publish now returns the status `publishing`. The account list no longer fails when n8n requests it before the credential is attached.
 
 ### 0.1.0
 
