@@ -69,7 +69,7 @@ Tested with n8n 2.43.8.
 
 **Plan limits.** The free plan allows 15 posts a month, 3 scheduled posts at a time, scheduling up to 7 days ahead, and doesn't include X. When a limit is reached, the node shows Publora's message with the limit that was hit. See [pricing](https://publora.com/pricing).
 
-**Publora Trigger and your n8n address.** Publora sends events only to public addresses. If your n8n runs on localhost or in a private network, set `N8N_WEBHOOK_URL` (or `WEBHOOK_URL` on older versions) to a public URL, or use a tunnel. Each Publora account can have up to 10 webhooks; every active workflow with a Publora Trigger uses one.
+**Publora Trigger and your n8n address.** Publora must be able to reach your n8n instance over the internet. Addresses such as localhost or a private network IP are refused. If your n8n runs on localhost or in a private network, set `N8N_WEBHOOK_URL` (or `WEBHOOK_URL` on older versions) to a public URL, or use a tunnel. Each Publora account can have up to 10 webhooks; every active workflow with a Publora Trigger uses one.
 
 **Example: post new blog articles.** RSS Feed Trigger → Publora (Post → Create, Publish: Now, Text: `{{ $json.title }} {{ $json.link }}`).
 
@@ -85,6 +85,10 @@ Tested with n8n 2.43.8.
 - [Support](mailto:support@publora.com)
 
 ## Version history
+
+### 0.1.2
+
+Post: Get Many no longer returns duplicates or misses posts when Limit is above 100. The note about reaching your n8n instance moved from the Publora Trigger to this README.
 
 ### 0.1.1
 

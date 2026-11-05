@@ -80,11 +80,10 @@ export async function publoraListPosts(
 	const posts: IDataObject[] = [];
 	let page = 1;
 	for (;;) {
-		const pageSize = limit === undefined ? 100 : Math.min(100, Math.max(1, limit - posts.length));
 		const response = await publoraApiRequest.call(this, 'GET', '/list-posts', undefined, {
 			...query,
 			page,
-			limit: pageSize,
+			limit: 100,
 		});
 		const batch = (response.posts as IDataObject[] | undefined) ?? [];
 		posts.push(...batch);

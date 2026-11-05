@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Post: Get Many no longer returns duplicates or misses posts when Limit is above 100 and not a multiple of 100.
+- The note about reaching your n8n instance moved from the Publora Trigger to the README.
+
 ## 0.1.1
 
 - Publish now returns the status `publishing` instead of `scheduled`. Read the final status with Post: Get.

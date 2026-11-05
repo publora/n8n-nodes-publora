@@ -84,13 +84,6 @@ export class PubloraTrigger implements INodeType {
 					},
 				],
 			},
-			{
-				displayName:
-					'Publora must be able to reach this n8n instance over the internet. Addresses such as localhost or a private network IP are refused.',
-				name: 'reachabilityNotice',
-				type: 'notice',
-				default: '',
-			},
 		],
 	};
 
